@@ -5,6 +5,8 @@ export interface MoviesApi {
   Error?: string
 }
 
+export type Error = Pick<MoviesApi, 'Error'>
+
 export interface Search {
   Poster: string
   Title: string

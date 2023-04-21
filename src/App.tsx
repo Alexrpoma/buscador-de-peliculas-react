@@ -1,31 +1,9 @@
-import { type MoviesApi } from './posterMoviesApi'
 import { MOVIES_FOUND } from './__mocks__/searchMovie'
+import { Movies } from './components/Movies'
 import './App.css'
 
-interface Props {
-  movies: MoviesApi
-}
-
-const MoviesFound: React.FC<Props> = ({ movies }) => {
-  const moviesFound = movies.Search
-  return (
-    <ul>
-      {
-        moviesFound.map(movie => {
-          return (
-            <li key={movie.imdbID}>
-              <h3>{movie.Title}</h3>
-              <img src={movie.Poster} alt={movie.Title}/>
-              <span>{movie.Year}</span>
-            </li>
-          )
-        })
-      }
-    </ul>
-  )
-}
-
 function App (): JSX.Element {
+  const movies = MOVIES_FOUND.Search
   return (
     <div className="Home">
       <header>
@@ -36,8 +14,7 @@ function App (): JSX.Element {
         </form>
       </header>
       <main>
-        Here will be the movies
-        <MoviesFound movies={MOVIES_FOUND}/>
+        <Movies movies={movies} />
       </main>
     </div>
   )
