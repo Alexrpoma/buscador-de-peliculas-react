@@ -1,9 +1,9 @@
-import { MOVIES_FOUND } from './__mocks__/searchMovie'
 import { Movies } from './components/Movies'
+import { useMovies } from './hooks/useMovies'
 import './App.css'
 
 function App (): JSX.Element {
-  const movies = MOVIES_FOUND.Search
+  const movies = useMovies()
   return (
     <div className="Home">
       <header>

@@ -19,3 +19,10 @@ export const TYPE = {
   MOVIE: 'movie',
   SERIES: 'series'
 } as const
+
+export interface Movie {
+  id: string
+  title: string
+  year: string
+  poster: string
+}
