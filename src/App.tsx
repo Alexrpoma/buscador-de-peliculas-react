@@ -1,13 +1,11 @@
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
+import { useSearch } from './hooks/useSearch'
 import './App.css'
-import { useEffect, useRef, useState } from 'react'
 
 function App (): JSX.Element {
   const movies = useMovies()
-  const [search, setSearch] = useState('')
-  const [error, setError] = useState('')
-  const isFirstInput = useRef(true)
+  const { search, error, setSearch } = useSearch()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
@@ -18,26 +16,6 @@ function App (): JSX.Element {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearch(event.target.value)
   }
-
-  useEffect(() => {
-    if (isFirstInput.current) {
-      isFirstInput.current = search === ''
-      return
-    }
-    if (search === '') {
-      setError('Is not possible to search an empty search')
-      return
-    }
-    if (search.match(/^\d+$/) != null) {
-      setError('Is not possible to search a number')
-      return
-    }
-    if (search.length < 3) {
-      setError('Is not possible to search less than 3 characters')
-      return
-    }
-    setError('')
-  }, [search])
 
   return (
     <div className="Home">
