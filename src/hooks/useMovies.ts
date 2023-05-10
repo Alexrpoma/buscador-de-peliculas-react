@@ -1,8 +1,20 @@
-import { MOVIES_FOUND } from '../__mocks__/searchMovie'
-import { type Movie } from '../posterMoviesApi'
+import { useState } from 'react'
+import type { MoviesApi, Movie, Error } from '../posterMoviesApi'
 
-export const useMovies = (): Movie[] => {
-  const movies = MOVIES_FOUND.Search
+interface MoviesData {
+  mappedMovies: Movie[] | undefined
+  getMovies: () => Promise<void>
+  errorMovie: Error | undefined
+}
+
+interface Search {
+  search: string
+}
+
+export const useMovies = ({ search }: Search): MoviesData => {
+  const [responseMovies, setResponseMovies] = useState<MoviesApi>()
+  const movies = responseMovies?.Search
+  const errorMovie = responseMovies?.Error as Error
 
   //* This is a way to map the data from the API to the data that we want to use in our app
   //* With this we can avoid to use the data from the API directly in our app!
@@ -13,5 +25,20 @@ export const useMovies = (): Movie[] => {
     poster: movie.Poster
   }))
 
-  return mappedMovies
+  const getMovies = async (): Promise<void> => {
+    if (search.length > 0) {
+      const response = await fetch(`http://www.omdbapi.com/?apikey=4287ad07&s=${search}`)
+      const data = await response.json()
+      setResponseMovies(data)
+    }
+  }
+
+  /* const getMovies = (): void => {
+    fetch(`http://www.omdbapi.com/?apikey=4287ad07&s=${search}`)
+      .then(async response => await response.json())
+      .then(data => { setResponseMovies(data) })
+      .catch(e => { console.log(e) })
+  } */
+
+  return { mappedMovies, getMovies, errorMovie }
 }

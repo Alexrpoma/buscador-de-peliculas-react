@@ -1,16 +1,16 @@
 import type { Error, Movie } from '../posterMoviesApi'
 
 interface Props {
-  movies: Movie[]
+  movies: Movie[] | undefined
   error?: Error
 }
 
 const ListOfMovies: React.FC<Props> = ({ movies }) => (
   <ul className='movies'>
     {
-      movies.map(movie => (
+      movies?.map(movie => (
         <li className='movie' key={movie.id}>
-          <h2>{movie.title}</h2>
+          <h3>{movie.title}</h3>
           <p>{movie.year}</p>
           <img src={movie.poster} alt={movie.title} />
         </li>
@@ -25,14 +25,13 @@ interface PropsError {
 
 const RenderNoResults: React.FC<PropsError> = ({ error }) => (
   error === undefined
-    ? <p>Not movie found!</p>
-    : <p>{error.Error}</p>
+    ? <p>Search for a movie!</p>
+    : <p style={{ color: 'red' }}>{error as string}</p>
 )
 
 export const Movies: React.FC<Props> = ({ movies, error }) => {
-  const thereAreMovies = movies?.length > 0
   return (
-    thereAreMovies
+    movies !== undefined && movies.length > 0
       ? <ListOfMovies movies={movies} />
       : <RenderNoResults error={error}/>
   )
