@@ -4,13 +4,14 @@ import { useSearch } from './hooks/useSearch'
 import './App.css'
 
 function App (): JSX.Element {
-  const movies = useMovies()
   const { search, error, setSearch } = useSearch()
+  const { mappedMovies, getMovies, errorMovie } = useMovies({ search })
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
     const fields = Object.fromEntries(new FormData(event.currentTarget))
     console.log(fields.searchMovie)
+    void getMovies()
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -25,15 +26,15 @@ function App (): JSX.Element {
           <input
           style={{
             border: '1px solid transparent',
-            borderColor: (error.length > 0) ? 'red' : 'transparent'
+            borderColor: error !== null ? 'red' : 'transparent'
           }}
           onChange={handleChange} name='searchMovie' value={search} placeholder="Movies.."/>
           <button type='submit'>submit</button>
         </form>
-        {(error.length > 0) && <p style={{ color: 'red' }}>{error}</p>}
+        {error !== null && <p style={{ color: 'red' }}>{error}</p>}
       </header>
       <main>
-        <Movies movies={movies} />
+        <Movies movies={mappedMovies} error={errorMovie} />
       </main>
     </div>
   )

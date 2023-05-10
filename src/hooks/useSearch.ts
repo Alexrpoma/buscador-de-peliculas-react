@@ -2,13 +2,13 @@ import { useState, useRef, useEffect } from 'react'
 
 interface SearchData {
   search: string
-  error: string
+  error: string | null
   setSearch: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const useSearch = (): SearchData => {
   const [search, setSearch] = useState('')
-  const [error, setError] = useState('')
+  const [error, setError] = useState<string | null>('')
   const isFirstInput = useRef(true)
   useEffect(() => {
     if (isFirstInput.current) {
@@ -27,7 +27,7 @@ export const useSearch = (): SearchData => {
       setError('Is not possible to search less than 3 characters')
       return
     }
-    setError('')
+    setError(null)
   }, [search])
   return { search, error, setSearch }
 }
