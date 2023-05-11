@@ -13,7 +13,7 @@ function App (): JSX.Element {
     event.preventDefault()
     const fields = Object.fromEntries(new FormData(event.currentTarget))
     console.log(fields.searchMovie)
-    void getMovies()
+    void getMovies({ search })
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {

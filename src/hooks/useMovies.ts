@@ -4,7 +4,7 @@ import { searchMovies } from '../services/movies'
 
 interface MoviesData {
   foundMovies: Movie[] | undefined
-  getMovies: () => Promise<void>
+  getMovies: ({ search }: { search: string }) => Promise<void>
   errorMovie: Error | undefined
 }
 
@@ -18,15 +18,17 @@ export const useMovies = ({ search, sort }: Search): MoviesData => {
   const [errorMovie, setErrorMovie] = useState<Error>()
   const previousSearch = useRef<string | undefined>(search)
 
-  const getMovies = async (): Promise<void> => {
-    if (previousSearch.current === search) return
-    if (search.length > 0) {
-      previousSearch.current = search
-      const result = await searchMovies({ search })
-      setFoundMovies(result.movies)
-      setErrorMovie(result.error)
+  const getMovies = useMemo(() => {
+    return async ({ search }: { search: string }): Promise<void> => {
+      if (previousSearch.current === search) return
+      if (search.length > 0) {
+        previousSearch.current = search
+        const result = await searchMovies({ search })
+        setFoundMovies(result.movies)
+        setErrorMovie(result.error)
+      }
     }
-  }
+  }, [])
 
   const sortMovies = useMemo(() => {
     if (foundMovies !== undefined) {
