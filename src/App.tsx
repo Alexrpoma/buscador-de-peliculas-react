@@ -5,7 +5,7 @@ import './App.css'
 
 function App (): JSX.Element {
   const { search, error, setSearch } = useSearch()
-  const { mappedMovies, getMovies, errorMovie } = useMovies({ search })
+  const { foundMovies, getMovies, errorMovie } = useMovies({ search })
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
@@ -34,7 +34,7 @@ function App (): JSX.Element {
         {error !== null && <p style={{ color: 'red' }}>{error}</p>}
       </header>
       <main>
-        <Movies movies={mappedMovies} error={errorMovie} />
+        <Movies movies={foundMovies} error={errorMovie} />
       </main>
     </div>
   )
