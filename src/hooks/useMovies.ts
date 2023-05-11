@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import type { Movie, Error } from '../posterMoviesApi'
 import { searchMovies } from '../services/movies'
 
@@ -28,12 +28,12 @@ export const useMovies = ({ search, sort }: Search): MoviesData => {
     }
   }
 
-  const sortMovies = (): Movie[] | undefined => {
+  const sortMovies = useMemo(() => {
     if (foundMovies !== undefined) {
       return sort ? [...foundMovies].sort((a, b) => a.title.localeCompare(b.title)) : foundMovies
     }
     return undefined
-  }
+  }, [sort, foundMovies])
 
-  return { foundMovies: sortMovies(), getMovies, errorMovie }
+  return { foundMovies: sortMovies, getMovies, errorMovie }
 }
