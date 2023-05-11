@@ -10,9 +10,10 @@ interface MoviesData {
 
 interface Search {
   search: string
+  sort: boolean
 }
 
-export const useMovies = ({ search }: Search): MoviesData => {
+export const useMovies = ({ search, sort }: Search): MoviesData => {
   const [foundMovies, setFoundMovies] = useState<Movie[]>()
   const [errorMovie, setErrorMovie] = useState<Error>()
   const previousSearch = useRef<string | undefined>(search)
@@ -27,5 +28,12 @@ export const useMovies = ({ search }: Search): MoviesData => {
     }
   }
 
-  return { foundMovies, getMovies, errorMovie }
+  const sortMovies = (): Movie[] | undefined => {
+    if (foundMovies !== undefined) {
+      return sort ? [...foundMovies].sort((a, b) => a.title.localeCompare(b.title)) : foundMovies
+    }
+    return undefined
+  }
+
+  return { foundMovies: sortMovies(), getMovies, errorMovie }
 }
